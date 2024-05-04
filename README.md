@@ -13,5 +13,3 @@ Agility: Affects speed, reflexes, and evasion in combat.
 Charisma: Determines social influence and persuasion abilities.
 
 Wisdom: Influences decision-making, perception, and insight into mystical phenomena.
-
-Dexterity: Affects accuracy with ranged weapons and precision in intricate tasks.
