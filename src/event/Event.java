@@ -1,20 +1,50 @@
 package event;
 
+public class Event {
+	private String content;
+	private String keyword;
+	private double strength;
+	private double intelligence;
+	private double agility;
+	private double stability;
+	private double defense;
 
-import role.Role;
+	public Event(String content, String keyword, double strength, double intelligence, double agility, double stability,
+			double defense) {
+		this.content = content;
+		this.keyword = keyword;
+		this.strength = strength;
+		this.intelligence = intelligence;
+		this.agility = agility;
+		this.stability = stability;
+		this.defense = defense;
+	}
 
-/**
- * 事件接口
- * @author 陈禹铮
- *
- */
-public interface Event {
+	public String getContent() {
+		return content;
+	}
 
-	void trigger(Role role);
+	public String getKeyword() {
+		return keyword;
+	}
 
-	String flag();
+	public double getStrength() {
+		return strength;
+	}
 
-	boolean isTriggered();
+	public double getIntelligence() {
+		return intelligence;
+	}
 
+	public double getAgility() {
+		return agility;
+	}
+
+	public double getStability() {
+		return stability;
+	}
+
+	public double getDefense() {
+		return defense;
+	}
 }
-

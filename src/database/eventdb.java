@@ -8,25 +8,26 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import event.Event;
+
 public class eventdb {
 	private Connection connection;
 	private Statement statement;
 	private String tableName;
-	private int strength;
-	private int intelligence;
-	private int agility;
-	private int charisma;
-	private int wisdom;
-	private int dexterity;
+	private double strength;
+	private double intelligence;
+	private double agility;
+	private double stability; // Changed from charisma
+	private double defense; // Changed from wisdom
 
-	public eventdb(String table, int strength, int intelligence, int agility, int charisma, int wisdom, int dexterity) {
+	public eventdb(String table, double strength, double intelligence, double agility, double stability,
+			double defense) {
 		this.tableName = table;
 		this.strength = strength;
 		this.intelligence = intelligence;
 		this.agility = agility;
-		this.charisma = charisma;
-		this.wisdom = wisdom;
-		this.dexterity = dexterity;
+		this.stability = stability;
+		this.defense = defense;
 		try {
 			// connect to the SQLite database
 			connection = DriverManager.getConnection("jdbc:sqlite:game.db");
@@ -34,7 +35,7 @@ public class eventdb {
 
 			// create the specified table if not exists
 			String createTableQuery = "CREATE TABLE IF NOT EXISTS " + tableName
-					+ " (id INTEGER PRIMARY KEY AUTOINCREMENT, content TEXT, keyword TEXT, Strength INTEGER, Intelligence INTEGER, Agility INTEGER, Charisma INTEGER, Wisdom INTEGER, Dexterity INTEGER)";
+					+ " (id INTEGER PRIMARY KEY AUTOINCREMENT, content TEXT, keyword TEXT, Strength DOUBLE, Intelligence DOUBLE, Agility DOUBLE, Stability DOUBLE, Defense DOUBLE)";
 			statement.executeUpdate(createTableQuery);
 
 		} catch (SQLException e) {
@@ -43,8 +44,8 @@ public class eventdb {
 	}
 
 	// insert an event into the db if not exists
-	public void insertEventIfNotExists(String content, String keyword, int Strength, int Intelligence, int Agility,
-			int Charisma, int Wisdom, int Dexterity) {
+	public void insertEventIfNotExists(String content, String keyword, double Strength, double Intelligence,
+			double Agility, double Stability, double Defense) {
 		try {
 			// Check if the event with content already exists
 			PreparedStatement checkContentStatement = connection
@@ -68,15 +69,14 @@ public class eventdb {
 
 			// Event does not exist, insert it
 			PreparedStatement insertStatement = connection.prepareStatement("INSERT INTO " + tableName
-					+ " (content, keyword, Strength, Intelligence, Agility, Charisma, Wisdom, Dexterity) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+					+ " (content, keyword, Strength, Intelligence, Agility, Stability, Defense) VALUES (?, ?, ?, ?, ?, ?, ?)");
 			insertStatement.setString(1, content);
 			insertStatement.setString(2, keyword);
-			insertStatement.setInt(3, Strength);
-			insertStatement.setInt(4, Intelligence);
-			insertStatement.setInt(5, Agility);
-			insertStatement.setInt(6, Charisma);
-			insertStatement.setInt(7, Wisdom);
-			insertStatement.setInt(8, Dexterity);
+			insertStatement.setDouble(3, Strength);
+			insertStatement.setDouble(4, Intelligence);
+			insertStatement.setDouble(5, Agility);
+			insertStatement.setDouble(6, Stability);
+			insertStatement.setDouble(7, Defense);
 			insertStatement.executeUpdate();
 
 		} catch (SQLException e) {
@@ -84,74 +84,39 @@ public class eventdb {
 		}
 	}
 
-	// Function to retrieve a random event from the database
-	public event getRandomEvent() {
+	// retrieve a random event from game db
+	public Event getRandomEvent() {
 		try {
-			ResultSet resultSet = statement.executeQuery("SELECT * FROM " + tableName + " ORDER BY RANDOM() LIMIT 1");
+			// consider both character table and common events table
+			String selectedTable = Math.random() < 0.5 ? tableName : "common_event";
+			String query = "SELECT * FROM " + selectedTable + " ORDER BY RANDOM() LIMIT 1";
+			ResultSet resultSet = statement.executeQuery(query);
+
 			if (resultSet.next()) {
-				return new event(resultSet.getString("content"), resultSet.getString("keyword"),
-						resultSet.getInt("Strength"), resultSet.getInt("Intelligence"), resultSet.getInt("Agility"),
-						resultSet.getInt("Charisma"), resultSet.getInt("Wisdom"), resultSet.getInt("Dexterity"));
+				String content = resultSet.getString("content");
+				String keyword = resultSet.getString("keyword");
+				double strength = 0;
+				double intelligence = 0;
+				double agility = 0;
+				double stability = 0;
+				double defense = 0;
+
+				// if the keyword is "Mysterious Stranger's Offer," generate random values for
+				// attributes value between -20 and 20
+				if (keyword.equals("Mysterious Stranger's Offer")) {
+					strength = (double) (Math.random() * 41) - 20;
+					intelligence = (double) (Math.random() * 41) - 20;
+					agility = (double) (Math.random() * 41) - 20;
+					stability = (double) (Math.random() * 41) - 20; // Changed from charisma
+					defense = (double) (Math.random() * 41) - 20; // Changed from wisdom
+				}
+
+				return new Event(content, keyword, strength, intelligence, agility, stability, defense);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return null;
-	}
-
-	public static class event {
-		private String content;
-		private String keyword;
-		private int strength;
-		private int intelligence;
-		private int agility;
-		private int charisma;
-		private int wisdom;
-		private int dexterity;
-
-		public event(String content, String keyword, int strength, int intelligence, int agility, int charisma,
-				int wisdom, int dexterity) {
-			this.content = content;
-			this.keyword = keyword;
-			this.strength = strength;
-			this.intelligence = intelligence;
-			this.agility = agility;
-			this.charisma = charisma;
-			this.wisdom = wisdom;
-			this.dexterity = dexterity;
-		}
-
-		public String getContent() {
-			return content;
-		}
-
-		public String getKeyword() {
-			return keyword;
-		}
-
-		public int getStrength() {
-			return strength;
-		}
-
-		public int getIntelligence() {
-			return intelligence;
-		}
-
-		public int getAgility() {
-			return agility;
-		}
-
-		public int getCharisma() {
-			return charisma;
-		}
-
-		public int getWisdom() {
-			return wisdom;
-		}
-
-		public int getDexterity() {
-			return dexterity;
-		}
 	}
 
 	// Function to execute a SQL query on the event table
@@ -174,15 +139,15 @@ public class eventdb {
 	}
 
 	public static void main(String[] args) {
-		eventdb gameDB = new eventdb("event", 10, 15, 20, 12, 18, 14);
+		eventdb gameDB = new eventdb("event", 10, 15, 20, 12, 18);
 
 		// Example usage: inserting an event if not exists
 		gameDB.insertEventIfNotExists(
 				"The player encounters a seemingly ordinary old man who offers a choice of one of three different boxes, each containing a different fantastic item.",
-				"Gift from the mysterious old man - 1", 5, 8, 10, 7, 9, 6);
+				"Gift from the mysterious old man - 1", 5, 8, 10, 7, 9);
 
 		// Example usage: retrieving a random event
-		eventdb.event randomEvent = gameDB.getRandomEvent();
+		Event randomEvent = gameDB.getRandomEvent();
 		if (randomEvent != null) {
 			System.out.println("Random event: " + randomEvent.getContent() + randomEvent.getKeyword());
 		}
