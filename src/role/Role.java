@@ -1,79 +1,66 @@
 package role;
+import javax.swing.JOptionPane;
 
 public abstract class Role {
     protected String name;
-    protected Double hp;
-    protected Double magic;
-    protected int power;
+    protected Double HP;
+    protected int INT; // 智力
+    protected int ATK; // 力量
+    protected int DEX; // 敏捷
+    protected int DEF; // 防御
+    protected int STA; // 耐力
+    protected String SKILL;
+    
+    public abstract double attack();
+    
+    public abstract boolean Dodge(); 
+      
+    public abstract double defense(int damage);
+    
 
-    public abstract int hit();
-
-    public Role() {
-
-    }
-
-    public Role(String name, Double hp, Double magic, int power) {
+    public Role(String name, Double HP, int INT, int ATK, int DEX, int DEF, int STA, String SKILL) {
         this.name = name;
-        this.hp = hp;
-        this.magic = magic;
-        this.power = power;
+        this.HP = HP;
+        this.INT = INT;
+        this.ATK = ATK;
+        this.DEX = DEX;
+        this.DEF = DEF;
+        this.STA = STA;
+        this.SKILL = SKILL;
+    }
+    
+    public void setINT(int change) {
+        this.INT += change;
     }
 
-    public void print() {
-        System.out.println("角色信息");
-        System.out.println("昵称:" + name);
-        System.out.println("血量:" + hp);
-        System.out.println("力量:" + power);
-        System.out.println("法术:" + magic);
+    public void setATK(int change) {
+        this.ATK += change;
     }
 
-    public String getName() {
-        return name;
+    public void setDEX(int change) {
+        this.DEX += change;
     }
 
-    public double getHp() {
-        return hp;
+    public void setDEF(int change) {
+        this.DEF += change;
     }
 
-    public double getMp() {
-        return magic;
+    public void setSTA(int change) {
+        this.STA += change;
     }
+    
+	// Method to view the character's current status in a GUI window
+    public void viewStatus() {
+        StringBuilder status = new StringBuilder();
+        status.append("<html>Name: " + name + "<br/>");
+        status.append("HP: " + HP + "<br/>");
+        status.append("Intelligence (INT): " + INT + "<br/>");
+        status.append("Strength (ATK): " + ATK + "<br/>");
+        status.append("Dexterity (DEX): " + DEX + "<br/>");
+        status.append("Defense (DEF): " + DEF + "<br/>");
+        status.append("Stamina (STA): " + STA + "<br/></html>");
+        status.append("Skill:" + SKILL  + "<br/></html>");
 
-    public int getAttack() {
-        return power;
+        JOptionPane.showMessageDialog(null, status.toString(), "Character Status", JOptionPane.INFORMATION_MESSAGE);
     }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setHp(Double hp) {
-        this.hp = hp;
-    }
-
-    public void setMp(Double magic) {
-        this.magic = magic;
-    }
-
-    public void setAttack(int power) {
-        this.power = power;
-    }
-
-    public Double getMagic() {
-        return magic;
-    }
-
-    public void setMagic(Double magic) {
-        this.magic = magic;
-    }
-
-    public int getPower() {
-        return power;
-    }
-
-    public void setPower(int power) {
-        this.power = power;
-    }
-
-
 }
