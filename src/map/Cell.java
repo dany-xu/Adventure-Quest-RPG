@@ -1,17 +1,19 @@
 package map;
 
-import event.Event;
+import event.AbstractEvent;
 
 public class Cell {
 
 	private int x;
-	
+
 	private int y;
 
-	private Event event;
-	
-	private boolean explored; 
-	
+	private AbstractEvent event;
+
+	private String eventFlag;
+
+	private boolean explored;
+
 	public Cell(int x, int y) {
 		super();
 		this.x = x;
@@ -34,12 +36,20 @@ public class Cell {
 		this.explored = explored;
 	}
 
-	public Event getEvent() {
+	public void setEvent(AbstractEvent event) {
+		this.event = event;
+	}
+
+	public void setEventFlag(String eventFlag) {
+		this.eventFlag = eventFlag;
+	}
+
+	public AbstractEvent getEvent() {
 		return event;
 	}
 
-	public void setEvent(Event event) {
-		this.event = event;
+	public String getEventFlag() {
+		return this.eventFlag;
 	}
-	
+
 }

@@ -2,12 +2,11 @@ package role;
 
 import java.util.Random;
 
-import database.eventdb;
-
 public class Witch extends Role {
 
 	public Witch(String name, Double HP) {
 		super(name, HP, 15, 5, 5, 10, 5, "Ancient Knowledge");
+		setRoleName();
 	}
 
 	@Override
@@ -42,17 +41,8 @@ public class Witch extends Role {
 	}
 
 	@Override
-	public void meetEvent(double strength, double intelligence, double agility, double stability, double defense) {
-		eventdb eventObj = new eventdb("witch_event", this.getATK(), this.getINT(), this.getDEX(), this.getDEF(),
-				this.getSTA());
-		event.Event event = eventObj.getRandomEvent();
-		this.setATK(event.getStrength());
-		this.setDEX(event.getAgility());
-		this.setINT(event.getIntelligence());
-		this.setDEF(event.getDefense());
-		this.setSTA(event.getStability());
-		this.setContent(event.getContent());
-		this.setKeyword(event.getKeyword());
+	public void setRoleName() {
+		this.roleName = "witch";
 	}
 
 }

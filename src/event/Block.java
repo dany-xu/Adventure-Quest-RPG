@@ -1,13 +1,9 @@
-package event;
-
-public class Block {
-	private Event event;
-
-	public Block(Event event) {
-		this.event = event;
-	}
-
-	public Event getEvent() {
-		return event;
-	}
-}
+/*
+ * package event;
+ * 
+ * public class Block { private EventInterface event;
+ * 
+ * public Block(EventInterface event) { this.event = event; }
+ * 
+ * public EventInterface getEvent() { return event; } }
+ */

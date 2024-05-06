@@ -2,6 +2,8 @@ package role;
 
 import javax.swing.JOptionPane;
 
+import map.Cell;
+
 public abstract class Role {
 	protected String name;
 	protected Double HP;
@@ -13,6 +15,7 @@ public abstract class Role {
 	protected String SKILL;
 	protected String content;
 	protected String keyword;
+	protected String roleName;
 
 	public abstract double attack();
 
@@ -20,8 +23,11 @@ public abstract class Role {
 
 	public abstract double defense(double damage);
 
-	public abstract void meetEvent(double strength, double intelligence, double agility, double stability,
-			double defense);
+	public abstract void setRoleName();
+
+	public String getRoleName() {
+		return this.roleName;
+	}
 
 	public Role(String name, Double HP, int INT, int ATK, int DEX, int DEF, int STA, String SKILL) {
 		this.name = name;
@@ -34,6 +40,10 @@ public abstract class Role {
 		this.SKILL = SKILL;
 		this.content = "";
 		this.keyword = "";
+	}
+
+	public void setHP(double HP) {
+		this.HP = HP;
 	}
 
 	public void setINT(double change) {
@@ -84,12 +94,20 @@ public abstract class Role {
 		return this.STA;
 	}
 
+	public String getName() {
+		return this.name;
+	}
+
 	public String getContent() {
 		return this.content;
 	}
 
 	public String getKeyword() {
 		return this.keyword;
+	}
+
+	public double getHP() {
+		return this.HP;
 	}
 
 	// Method to view the character's current status in a GUI window
@@ -107,4 +125,14 @@ public abstract class Role {
 		JOptionPane.showMessageDialog(null, status.toString(), "Character Status", JOptionPane.INFORMATION_MESSAGE);
 	}
 
+	// public abstract void meetEvent(Cell cell);
+	public void meetEvent(Cell cell) {
+		this.setATK(cell.getEvent().getStrength());
+		this.setDEX(cell.getEvent().getAgility());
+		this.setINT(cell.getEvent().getIntelligence());
+		this.setDEF(cell.getEvent().getDefense());
+		this.setSTA(cell.getEvent().getStability());
+		this.setContent(cell.getEvent().getContent());
+		this.setKeyword(cell.getEvent().getKeyword());
+	}
 }

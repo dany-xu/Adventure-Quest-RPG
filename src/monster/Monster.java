@@ -1,23 +1,27 @@
 package monster;
 
+import map.Cell;
 import role.Role;
 
 public class Monster extends Role {
-    private double ex;
-    public  Monster(String name, Double hp, Double magic, int power, double ex) {
-        super(name, hp, magic, power);
-        this.setEx(ex);
-    }
+	private double ex;
 
-    @Override
-    public int hit() {
-        System.out.println("平A!");
-        int aa=getAttack() + (int) (Math.random() * 10);
-        aa-=10;
-        System.out.println("输出伤害为"+aa);
-        return aa;
+	public Monster(String name, Double HP, int INT, int ATK, int DEX, int DEF, int STA, String SKILL) {
+		super(name, HP, INT, ATK, DEX, DEF, STA, SKILL);
+		this.setEx(ex);
+	}
 
-    }
+	public double attack() {
+		return this.ATK;
+	}
+
+	public boolean Dodge() {
+		return false;
+	}
+
+	public double defense(double damage) {
+		return damage;
+	}
 
 	public double getEx() {
 		return ex;
@@ -26,4 +30,29 @@ public class Monster extends Role {
 	public void setEx(double ex) {
 		this.ex = ex;
 	}
+
+	public double getHP() {
+		return this.HP;
+	}
+
+	public void setHP(double HP) {
+		this.HP = HP;
+	}
+
+	public String getName() {
+		return this.name;
+	}
+
+	@Override
+	public void meetEvent(Cell cell) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void setRoleName() {
+		// TODO Auto-generated method stub
+
+	}
+
 }
