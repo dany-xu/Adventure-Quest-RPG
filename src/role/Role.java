@@ -1,7 +1,5 @@
 package role;
 
-import javax.swing.JOptionPane;
-
 import map.Cell;
 
 public abstract class Role {
@@ -38,8 +36,8 @@ public abstract class Role {
 		this.DEF = DEF;
 		this.STA = STA;
 		this.SKILL = SKILL;
-		this.content = "";
-		this.keyword = "";
+		// this.content = "";
+		// this.keyword = "";
 	}
 
 	public void setHP(double HP) {
@@ -51,7 +49,9 @@ public abstract class Role {
 	}
 
 	public void setATK(double change) {
+		// System.out.println("setATK: " + change + ", " + ATK);
 		this.ATK += change;
+		// System.out.println("setATK_Added: " + ATK);
 	}
 
 	public void setDEX(double change) {
@@ -66,14 +66,11 @@ public abstract class Role {
 		this.STA += change;
 	}
 
-	public void setContent(String change) {
-		this.content = change;
-	}
-
-	public void setKeyword(String change) {
-		this.keyword = change;
-	}
-
+	/*
+	 * public void setContent(String change) { this.content = change; }
+	 * 
+	 * public void setKeyword(String change) { this.keyword = change; }
+	 */
 	public double getINT() {
 		return this.INT;
 	}
@@ -111,28 +108,29 @@ public abstract class Role {
 	}
 
 	// Method to view the character's current status in a GUI window
-	public void viewStatus() {
+	public String viewStatus() {
 		StringBuilder status = new StringBuilder();
-		status.append("<html>Name: " + name + "<br/>");
-		status.append("HP: " + HP + "<br/>");
-		status.append("Intelligence (INT): " + INT + "<br/>");
-		status.append("Strength (ATK): " + ATK + "<br/>");
-		status.append("Dexterity (DEX): " + DEX + "<br/>");
-		status.append("Defense (DEF): " + DEF + "<br/>");
-		status.append("Stamina (STA): " + STA + "<br/></html>");
-		status.append("Skill:" + SKILL + "<br/></html>");
-
-		JOptionPane.showMessageDialog(null, status.toString(), "Character Status", JOptionPane.INFORMATION_MESSAGE);
+		status.append("Name: ").append(this.name).append("\n");
+		status.append("HP: ").append(this.HP).append("\n");
+		status.append("Intelligence (INT): ").append(this.INT).append("\n");
+		status.append("Strength (ATK): ").append(this.ATK).append("\n");
+		status.append("Dexterity (DEX): ").append(this.DEX).append("\n");
+		status.append("Defense (DEF): ").append(this.DEF).append("\n");
+		status.append("Stamina (STA): ").append(this.STA).append("\n");
+		status.append("Skill: ").append(this.SKILL).append("\n");
+		return status.toString();
 	}
 
 	// public abstract void meetEvent(Cell cell);
 	public void meetEvent(Cell cell) {
+		// System.out.println(ATK + "," + cell.getEvent().getStrength());
 		this.setATK(cell.getEvent().getStrength());
+		// System.out.println("AFTER:" + ATK);
 		this.setDEX(cell.getEvent().getAgility());
 		this.setINT(cell.getEvent().getIntelligence());
 		this.setDEF(cell.getEvent().getDefense());
 		this.setSTA(cell.getEvent().getStability());
-		this.setContent(cell.getEvent().getContent());
-		this.setKeyword(cell.getEvent().getKeyword());
+		// this.setContent(cell.getEvent().getContent());
+		// this.setKeyword(cell.getEvent().getKeyword());
 	}
 }

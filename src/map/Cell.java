@@ -1,6 +1,8 @@
 package map;
 
 import event.AbstractEvent;
+import event.RoleEvent;
+import role.Knight;
 
 public class Cell {
 
@@ -50,6 +52,18 @@ public class Cell {
 
 	public String getEventFlag() {
 		return this.eventFlag;
+	}
+
+	public static void main(String[] args) {
+		Knight role = new Knight("Dummy", 100.0);
+		System.out.println(role.viewStatus());
+		// RoleEvent roleEvent = new RoleEvent(role.getRoleName() + "_event");
+		Cell cell = new Cell(1, 1);
+		cell.setEvent(new RoleEvent(role.getRoleName() + "_event"));
+		cell.getEvent().getRandomEvent();
+		role.meetEvent(cell);
+
+		// System.out.println(role.viewStatus());
 	}
 
 }

@@ -3,20 +3,14 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Locale;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -28,7 +22,6 @@ import javax.swing.SwingUtilities;
 import event.Fight;
 import map.Cell;
 import map.FinalCell;
-// Assume WorldMap, Cell, and other necessary classes are imported and defined properly
 import map.WorldMap;
 import monster.Goblin;
 import role.Knight;
@@ -48,6 +41,7 @@ public class UI extends JFrame implements KeyListener {
 	private JTextArea infoArea;
 	private JTextArea eventArea;
 	private ImageIcon playerIcon;
+	private JLabel roleAttributesLabel; // Label to display role attributes
 
 	private ImageIcon resizeIcon(ImageIcon icon, int width, int height) {
 		Image img = icon.getImage();
@@ -59,7 +53,6 @@ public class UI extends JFrame implements KeyListener {
 		loadImages(); // add player tag
 		initializeUI();
 		createR(); // init role
-
 	}
 
 	private void loadImages() {
@@ -68,6 +61,33 @@ public class UI extends JFrame implements KeyListener {
 			ImageIcon originalIcon = new ImageIcon(imageUrl);
 			playerIcon = resizeIcon(originalIcon, 40, 40);
 		}
+		// 不知道问什么窗口无法更新status，位置显示也有问题
+		// 还差回合制显示打怪（还有你之前说的玩家和怪物选action对比？还实现吗）
+
+		// 不确定下面的thread有没有用
+		/*
+		 * // Start a new thread to continuously update the role attributes Thread
+		 * statusUpdateThread = new Thread(() -> { while (true) { try { // Sleep for a
+		 * certain interval (e.g., 1 second) Thread.sleep(1000); // Call
+		 * role.viewStatus() to get the updated role attributes String status =
+		 * role.viewStatus(); // Update the role attributes label
+		 * SwingUtilities.invokeLater(() -> roleAttributesLabel.setText(status)); }
+		 * catch (InterruptedException e) { e.printStackTrace(); } } });
+		 * statusUpdateThread.start();
+		 */
+	}
+
+	private void updateRoleAttributes() {
+		// Create and start a new thread to update the role attributes
+		Thread statusUpdateThread = new Thread(new Runnable() {
+			public void run() {
+				// Call role.viewStatus() to get the updated role attributes
+				String status = role.viewStatus();
+				// Update the role attributes label
+				roleAttributesLabel.setText(status);
+			}
+		});
+		statusUpdateThread.start();
 	}
 
 	private void initializeUI() {
@@ -77,43 +97,36 @@ public class UI extends JFrame implements KeyListener {
 
 		setLayout(new BorderLayout());
 
-		// create map
+		// Create map
 		mapPanel = new JPanel(new GridLayout(height, width));
 		mapPanel.setPreferredSize(new Dimension(400, 400));
 		add(mapPanel, BorderLayout.CENTER);
 
-		// show info
+		// Create info panel to display role attributes
+		JPanel infoPanel = new JPanel(new BorderLayout());
+		roleAttributesLabel = new JLabel();
+		infoPanel.add(roleAttributesLabel, BorderLayout.CENTER);
+		add(infoPanel, BorderLayout.SOUTH);
+
+		// Create info area to display additional information
 		infoArea = new JTextArea(5, 30);
 		infoArea.setEditable(false);
-		add(new JScrollPane(infoArea), BorderLayout.SOUTH);
+		infoPanel.add(new JScrollPane(infoArea), BorderLayout.NORTH);
 
-		// show events
+		// Show events
 		eventArea = new JTextArea(10, 30);
 		eventArea.setEditable(false);
 		eventArea.setLineWrap(true);
 		eventArea.setWrapStyleWord(true);
 		add(new JScrollPane(eventArea), BorderLayout.EAST);
 
+		// Register key listeners
 		addKeyListener(this);
 		mapPanel.addKeyListener(this);
-		infoArea.addKeyListener(this);
+		infoArea.addKeyListener(this); // Ensure infoArea is initialized before adding the key listener
 		eventArea.addKeyListener(this);
 
-		// Add button to show role status
-		JButton viewStatusButton = new JButton("View Status");
-		viewStatusButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// Create and start a new thread to update the role status
-				Thread statusUpdateThread = new Thread(new Runnable() {
-					public void run() {
-						role.viewStatus(); // Assuming this method displays the role status
-					}
-				});
-				statusUpdateThread.start();
-			}
-		});
-		add(viewStatusButton, BorderLayout.PAGE_END);
-
+		// Pack and display the window
 		pack();
 		setVisible(true);
 	}
@@ -127,42 +140,38 @@ public class UI extends JFrame implements KeyListener {
 		}
 
 		String[] options = { "Knight", "Ranger", "Thief", "Witch", "Soldier" };
-		JOptionPane pane = new JOptionPane("Please choose your character class", JOptionPane.PLAIN_MESSAGE,
-				JOptionPane.DEFAULT_OPTION, null, options, options[0]);
-		JDialog dialog = pane.createDialog(this, "Character Selection");
-		dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
-		dialog.addWindowListener(new WindowAdapter() {
-			@Override
-			public void windowClosing(WindowEvent e) {
-				int result = JOptionPane.showConfirmDialog(UI.this,
-						"You have to choose a role. Are you sure you want to exit?", "Exit", JOptionPane.YES_NO_OPTION,
-						JOptionPane.QUESTION_MESSAGE);
-				if (result == JOptionPane.YES_OPTION) {
-					System.exit(0);
-				}
-			}
-		});
-		dialog.setVisible(true);
-		Object selectedValue = pane.getValue();
-		if (selectedValue == null || !(selectedValue instanceof String)) {
-			JOptionPane.showMessageDialog(this, "You must choose a character class.");
-			createR(); // Prompt again for character selection
-			return;
+		String selectedRole = (String) JOptionPane.showInputDialog(this, "Please choose your character class",
+				"Character Selection", JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
+
+		if (selectedRole == null) {
+			System.exit(0);
 		}
-		String selectedRole = (String) selectedValue;
+
 		int roleType = Arrays.asList(options).indexOf(selectedRole);
 		// setup role
-		if (roleType == 0) {
+		switch (roleType) {
+		case 0:
 			this.role = new Knight(name, 100.0);
-		} else if (roleType == 1) {
+			break;
+		case 1:
 			this.role = new Ranger(name, 100.0);
-		} else if (roleType == 2) {
+			break;
+		case 2:
 			this.role = new Thief(name, 100.0);
-		} else if (roleType == 3) {
+			break;
+		case 3:
 			this.role = new Witch(name, 100.0);
-		} else {
+			break;
+		case 4:
 			this.role = new Soldier(name, 100.0);
+			break;
+		default:
+			break;
 		}
+
+		// Update role attributes label
+		updateRoleAttributes();
+
 		this.worldMap = new WorldMap(width, height, role);
 		currCell = worldMap.randBirthCell();
 		showMap();
@@ -185,10 +194,10 @@ public class UI extends JFrame implements KeyListener {
 						JOptionPane.showMessageDialog(this, "Congratulations!");
 						role.viewStatus();
 						removeKeyListener(this);
-
-					} else if (cell.getEvent().getEventFlag() == "M") {
+					} else if (cell.getEvent().getEventFlag().equals("M")) {
 						cellLabel.setBackground(Color.RED);
-					} else if (cell.getEvent().getEventFlag() == "C" || cell.getEvent().getEventFlag() == "R") {
+					} else if (cell.getEvent().getEventFlag().equals("C")
+							|| cell.getEvent().getEventFlag().equals("R")) {
 						cellLabel.setBackground(Color.BLUE);
 					} else {
 						cellLabel.setBackground(Color.WHITE);
@@ -234,10 +243,13 @@ public class UI extends JFrame implements KeyListener {
 			currCell.getEvent().getRandomEvent(); // get attribute values
 			String eventKeyword = currCell.getEvent().getKeyword();
 			String eventContent = currCell.getEvent().getContent();
-			eventArea.setText(eventKeyword + ": " + eventContent);
-			if (currCell.getEvent().getEventFlag() == "C" || currCell.getEvent().getEventFlag() == "R") {
+			eventArea.setText(eventKeyword + ": " + eventContent); // + role.viewStatus());
+			// System.out.println("event atk" + currCell.getEvent().getStrength());
+			if (currCell.getEvent().getEventFlag().equals("C") || currCell.getEvent().getEventFlag().equals("R")) {
+				// System.out.println("before meet" + role.viewStatus());
 				role.meetEvent(currCell); // change role attribute values
-			} else if (currCell.getEvent().getEventFlag() == "M") {
+				// System.out.println("after meet" + role.viewStatus());
+			} else if (currCell.getEvent().getEventFlag().equals("M")) {
 				Goblin a = new Goblin();
 				Fight fight = new Fight(a, role);
 				String eventMessage = fight.startCombat();
@@ -269,7 +281,10 @@ public class UI extends JFrame implements KeyListener {
 			break;
 		case KeyEvent.VK_N:
 			// Assuming this should show role info
-			role.viewStatus(); // Assume this method exists
+			// role.viewStatus(); // Assume this method exists
+			String status = role.viewStatus();
+			// Update the role attributes label
+			roleAttributesLabel.setText(status);
 			break;
 		case KeyEvent.VK_0:
 			showMap();

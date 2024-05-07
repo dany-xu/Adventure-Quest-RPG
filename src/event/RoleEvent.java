@@ -37,6 +37,7 @@ public class RoleEvent extends AbstractEvent {
 				this.content = resultSet.getString("content");
 				this.keyword = resultSet.getString("keyword");
 				this.strength = resultSet.getDouble("strength");
+				// System.out.println("Strength: " + getStrength());
 				this.intelligence = resultSet.getDouble("intelligence");
 				this.agility = resultSet.getDouble("agility");
 				this.stability = resultSet.getDouble("stability");

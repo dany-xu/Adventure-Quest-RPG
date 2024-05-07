@@ -29,6 +29,8 @@ public class CommonEvent extends AbstractEvent {
 		try {
 			String query = "SELECT * FROM common_event ORDER BY RANDOM() LIMIT 1";
 			ResultSet resultSet = statement.executeQuery(query);
+			// System.out.println(resultSet.getString("keyword") +
+			// resultSet.getString("strength"));
 
 			if (resultSet.next()) {
 				this.content = resultSet.getString("content");
