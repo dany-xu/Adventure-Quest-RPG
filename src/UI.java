@@ -3,6 +3,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
@@ -13,6 +15,7 @@ import java.util.Locale;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -25,7 +28,7 @@ import javax.swing.SwingUtilities;
 import event.Fight;
 import map.Cell;
 import map.FinalCell;
-// 假设WorldMap, Cell等类以及它们的方法已正确定义
+// Assume WorldMap, Cell, and other necessary classes are imported and defined properly
 import map.WorldMap;
 import monster.Goblin;
 import role.Knight;
@@ -72,14 +75,6 @@ public class UI extends JFrame implements KeyListener {
 		setSize(800, 600);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		// Add a WindowListener to prompt the user when closing the window
-		addWindowListener(new WindowAdapter() {
-			@Override
-			public void windowClosing(WindowEvent e) {
-				confirmExit();
-			}
-		});
-
 		setLayout(new BorderLayout());
 
 		// create map
@@ -104,16 +99,23 @@ public class UI extends JFrame implements KeyListener {
 		infoArea.addKeyListener(this);
 		eventArea.addKeyListener(this);
 
+		// Add button to show role status
+		JButton viewStatusButton = new JButton("View Status");
+		viewStatusButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// Create and start a new thread to update the role status
+				Thread statusUpdateThread = new Thread(new Runnable() {
+					public void run() {
+						role.viewStatus(); // Assuming this method displays the role status
+					}
+				});
+				statusUpdateThread.start();
+			}
+		});
+		add(viewStatusButton, BorderLayout.PAGE_END);
+
 		pack();
 		setVisible(true);
-	}
-
-	private void confirmExit() {
-		int result = JOptionPane.showConfirmDialog(UI.this, "Are you sure you want to exit the game?", "Exit",
-				JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-		if (result == JOptionPane.YES_OPTION) {
-			System.exit(0);
-		}
 	}
 
 	public void createR() {
@@ -180,7 +182,6 @@ public class UI extends JFrame implements KeyListener {
 					cellLabel.setOpaque(true);
 				} else { // Explored cell
 					if (cell instanceof FinalCell) {
-						// cellLabel.setBackground(Color.YELLOW);
 						JOptionPane.showMessageDialog(this, "Congratulations!");
 						role.viewStatus();
 						removeKeyListener(this);

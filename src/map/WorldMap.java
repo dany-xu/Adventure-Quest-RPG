@@ -17,7 +17,6 @@ public class WorldMap {
 	private Cell roleCell;
 	private int birthx;
 	private int birthy;
-	// public Block[][] blocks = new Block[10][10];
 
 	public WorldMap(int width, int height, Role role) {
 		this.width = width;
@@ -26,15 +25,6 @@ public class WorldMap {
 		cells = new Cell[height][width];
 		initMap(role);
 	}
-
-	/*
-	 * public WorldMap() { for (int j = 0; j < blocks.length; j++) { for (int i = 0;
-	 * i < blocks[j].length; i++) { int retindex = (int) (Math.random() * 3); switch
-	 * (retindex) { case 0: blocks[j][i] = new Block(new MonsterEvent()); break;
-	 * case 1: blocks[j][i] = new Block(new BlessingEvent()); break; case 2:
-	 * blocks[j][i] = new Block(new CureEvent()); break; // default: // blocks[j][i]
-	 * = new event.Block(new event.CureEvent()); // break; } } } }
-	 */
 
 	private void initMap(Role role) {
 		for (int i = 0; i < height; i++) {
@@ -122,7 +112,4 @@ public class WorldMap {
 	public Cell getCell(int x, int y) {
 		return cells[y][x];
 	}
-	/*
-	 * public Block[][] getBlocks() { return blocks; }
-	 */
 }
