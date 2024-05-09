@@ -27,7 +27,7 @@ public class Knight extends Role {
 		return (35 / (this.DEF + 35)) * damage;
 	}
 
-	public void useSkill(int damage) {
+	public void useSkill() {
 
 		this.setDEF(5);
 		this.setDEX(-3);

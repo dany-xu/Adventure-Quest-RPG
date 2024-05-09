@@ -32,12 +32,9 @@ public class Witch extends Role {
 	 * a maximum of 100 HP.
 	 */
 	public void useSkill() {
-		double healAmount = 30; // Amount to heal
-		if (this.HP + healAmount > 100) { // Check if healing would exceed 100 HP
-			this.HP = 100.0; // Set HP to maximum if the heal would exceed 100 HP
-		} else {
-			this.HP += healAmount; // Otherwise, just add the heal amount
-		}
+		this.setINT(5);
+		this.setSTA(-3);
+		this.setDEX(-3);
 	}
 
 	@Override

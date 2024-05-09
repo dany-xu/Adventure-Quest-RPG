@@ -36,14 +36,13 @@ public class CommonEvent extends AbstractEvent {
 				this.content = resultSet.getString("content");
 				this.keyword = resultSet.getString("keyword");
 				if (keyword.equals("Mysterious Stranger's Offer")) {
-					this.strength = (double) (Math.random() * 41) - 20;
-					this.intelligence = (double) (Math.random() * 41) - 20;
-					this.agility = (double) (Math.random() * 41) - 20;
-					this.stability = (double) (Math.random() * 41) - 20;
-					this.defense = (double) (Math.random() * 41) - 20;
+					this.strength = (Math.random() * 11) - 5;
+					this.intelligence = (Math.random() * 11) - 5;
+					this.agility = (Math.random() * 11) - 5;
+					this.stability = (Math.random() * 11) - 5;
+					this.defense = (Math.random() * 11) - 5;
 					return;
 				}
-
 				this.strength = resultSet.getDouble("strength");
 				this.intelligence = resultSet.getDouble("intelligence");
 				this.agility = resultSet.getDouble("agility");

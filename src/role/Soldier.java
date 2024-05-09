@@ -30,7 +30,7 @@ public class Soldier extends Role {
 		return (50 / (this.DEF + 50)) * damage;
 	}
 
-	public void useSkill(int damage) {
+	public void useSkill() {
 
 		this.setATK(5);
 		this.setDEX(-3);

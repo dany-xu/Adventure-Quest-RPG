@@ -27,7 +27,7 @@ public class Thief extends Role {
 		return (60 / (this.DEF + 60)) * damage;
 	}
 
-	public void useSkill(double damage) {
+	public void useSkill() {
 
 		this.setDEX(5);
 		this.setATK(-3);

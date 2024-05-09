@@ -1,5 +1,7 @@
 package role;
 
+import javax.swing.JOptionPane;
+
 import map.Cell;
 
 public abstract class Role {
@@ -110,6 +112,7 @@ public abstract class Role {
 	// Method to view the character's current status in a GUI window
 	public String viewStatus() {
 		StringBuilder status = new StringBuilder();
+		status.append("Character Status Screen").append("\n");
 		status.append("Name: ").append(this.name).append("\n");
 		status.append("HP: ").append(this.HP).append("\n");
 		status.append("Intelligence (INT): ").append(this.INT).append("\n");
@@ -119,6 +122,7 @@ public abstract class Role {
 		status.append("Stamina (STA): ").append(this.STA).append("\n");
 		status.append("Skill: ").append(this.SKILL).append("\n");
 		return status.toString();
+		
 	}
 
 	// public abstract void meetEvent(Cell cell);
@@ -133,4 +137,6 @@ public abstract class Role {
 		// this.setContent(cell.getEvent().getContent());
 		// this.setKeyword(cell.getEvent().getKeyword());
 	}
+
+	public abstract void useSkill();
 }

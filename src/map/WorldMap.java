@@ -15,8 +15,8 @@ public class WorldMap {
 	private int cellCount;
 	private Cell[][] cells; // map init
 	private Cell roleCell;
-	private int birthx;
-	private int birthy;
+	private int birthx = 0;
+	private int birthy = 0;
 
 	public WorldMap(int width, int height, Role role) {
 		this.width = width;
@@ -36,6 +36,8 @@ public class WorldMap {
 		}
 
 		Random r = new Random();
+		this.birthx = r.nextInt(width);
+		this.birthy = r.nextInt(height);
 		// monster event
 		int monsterCount = cellCount / 10;
 		for (int i = 0; i < monsterCount; i++) {
@@ -84,11 +86,8 @@ public class WorldMap {
 		cells[y][x] = new FinalCell(x, y);
 	}
 
-	// random birth cell
-	public Cell randBirthCell() {
-		Random r = new Random();
-		this.birthx = r.nextInt(width);
-		this.birthy = r.nextInt(height);
+	// get birth cell
+	public Cell getBirthCell() {
 		Cell cell = cells[this.birthy][this.birthx];
 		cell.setExplored(true);
 		return cell;

@@ -56,7 +56,7 @@ public class Cell {
 
 	public static void main(String[] args) {
 		Knight role = new Knight("Dummy", 100.0);
-		System.out.println(role.viewStatus());
+//		System.out.println(role.viewStatus());
 		// RoleEvent roleEvent = new RoleEvent(role.getRoleName() + "_event");
 		Cell cell = new Cell(1, 1);
 		cell.setEvent(new RoleEvent(role.getRoleName() + "_event"));

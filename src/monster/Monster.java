@@ -55,4 +55,10 @@ public class Monster extends Role {
 
 	}
 
+	@Override
+	public void useSkill() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

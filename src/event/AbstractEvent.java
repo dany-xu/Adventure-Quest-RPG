@@ -4,6 +4,7 @@ package event;
 public abstract class AbstractEvent implements EventInterface {
 	protected String content;
 	protected String keyword;
+	public String name = "";
 	protected double strength;
 	protected double intelligence;
 	protected double agility;
