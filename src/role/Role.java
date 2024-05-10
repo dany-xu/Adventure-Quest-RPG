@@ -7,11 +7,11 @@ import map.Cell;
 public abstract class Role {
 	protected String name;
 	protected Double HP;
-	protected double INT; // 智力
-	protected double ATK; // 力量
-	protected double DEX; // 敏捷
-	protected double DEF; // 防御
-	protected double STA; // 耐力
+	protected double INT; 
+	protected double ATK; 
+	protected double DEX; 
+	protected double DEF; 
+	protected double STA; 
 	protected String SKILL;
 	protected String content;
 	protected String keyword;

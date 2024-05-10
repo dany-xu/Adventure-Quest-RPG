@@ -133,8 +133,8 @@ public class UI extends JFrame implements KeyListener {
 			Image resizedImg = img.getScaledInstance(480, 270, Image.SCALE_SMOOTH);
 			icon.setImage(resizedImg);
 			imageLabel.setIcon(icon);
-			imageLabel.revalidate(); // 确保组件布局更新
-			imageLabel.repaint(); // 重绘组件
+			imageLabel.revalidate(); 
+			imageLabel.repaint(); 
 		} else {
 			System.out.println("Image file not found: " + imagePath);
 		}
@@ -267,7 +267,8 @@ public class UI extends JFrame implements KeyListener {
 		mapPanel.revalidate();
 		mapPanel.repaint();
 	}
-
+	
+	// Multithreading part: keep refresh the status information
 	private void startStatusUpdateThread() {
 		Thread statusUpdateThread = new Thread(() -> {
 			while (true) {

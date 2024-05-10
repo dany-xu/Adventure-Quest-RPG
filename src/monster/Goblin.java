@@ -1,5 +1,11 @@
 package monster;
 
+
+
+
+
+
+// For test fight system
 public class Goblin extends Monster {
 
     public Goblin() {

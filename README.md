@@ -2,14 +2,14 @@
 
 This project is finished during April, 2024 - May, 2024 as the final project for the Big Data class by Adjunct Assistant Professor Amit Patel at New York University.
 
-Our project realized an adventure quest game where players can choose their characters (Witch, Soldier, Thief, Warrior, Ranger), and 6 ability attributes as below:
+We designed a mist treasure hunting game based on Java and its related components. Through the journey within a map, the player has different frequencies to meet various events or even fight the monsters. And some simple graphic elements are included to enhance the story-line. Players can have different experiences every time they play. 
 
-Strength: Determines physical power and ability to wield heavy weapons.
+At the beginning, the player can use their own name and choose their own character with different skills according to their classical characteristics. When encountering a monster, the player has three options to protect himself from the attack of the monster. He can also use the character skills to prepare better for the following adventures like the "healing" skill. To make the game better suits the environment of "mist", we made the start point and treasure spot to be totally hidden. Players have to discover by themselves with their own luck. 
 
-Intelligence: Influences problem-solving skills and magical aptitude.
+## How to Run
 
-Agility: Affects speed, reflexes, and evasion in combat.
+First, make sure the "sqlite-jdbc" package is included in the application. It should be imported successfully in the project already. 
 
-Charisma: Determines social influence and persuasion abilities.
+To do the operations related to database, please visit the database - "createdb.java" and run all the codes in its main function since it is relatively independent from other files. 
 
-Wisdom: Influences decision-making, perception, and insight into mystical phenomena.
+To play the game, please visit ui.java and run directly.

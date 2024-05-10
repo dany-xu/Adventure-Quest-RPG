@@ -11,12 +11,12 @@ public class Thief extends Role {
 
 	@Override
 	public double attack() {
-		return this.ATK + this.DEX * 0.5; // 盗贼攻击力受敏捷影响
+		return this.ATK + this.DEX * 0.5; 
 	}
 
 	@Override
 	public boolean Dodge() {
-		double dodgeChance = this.DEX * 0.08; // 盗贼有更高的闪避率
+		double dodgeChance = this.DEX * 0.08; 
 		Random randomGenerator = new Random();
 		double randomValue = randomGenerator.nextDouble();
 		return randomValue <= dodgeChance;
